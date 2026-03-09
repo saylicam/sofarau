@@ -32,7 +32,7 @@ const fadeInUp = {
 
 export function EngineeringPrecision() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50/30 to-white">
+    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-white">
       {/* Texture de grain */}
       <div
         className="absolute inset-0 opacity-[0.03]"
@@ -50,8 +50,28 @@ export function EngineeringPrecision() {
           viewport={{ once: true, margin: "-150px" }}
           variants={containerVariants}
         >
-          {/* Header */}
-          <motion.div variants={fadeInUp} className="text-center">
+          {/* Micro-texte de liaison avec animation de fondu lent */}
+          <motion.div
+            className="mb-12 text-center"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">
+              DÉCOUVREZ NOTRE INGÉNIERIE EN DÉTAIL
+            </p>
+          </motion.div>
+
+          {/* Header avec animation conditionnelle */}
+          <motion.div
+            variants={fadeInUp}
+            className="text-center"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-200px" }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
             <div className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
               Ingénierie de Précision
             </div>
@@ -65,19 +85,37 @@ export function EngineeringPrecision() {
             </p>
           </motion.div>
 
+          {/* Texte d'introduction au-dessus du schéma */}
+          <motion.div
+            variants={fadeInUp}
+            className="mt-12 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+          >
+            <p className="text-base font-medium text-slate-600 md:text-lg">
+              Explorez les détails de notre ingénierie.
+            </p>
+          </motion.div>
+
           {/* Schéma Blueprint en grand format */}
           <motion.div
             variants={fadeInUp}
-            className="mt-16 rounded-2xl border border-slate-200/60 bg-white p-8 shadow-2xl md:p-12"
+            className="mt-8 rounded-2xl border border-slate-200/60 bg-white p-8 shadow-2xl md:p-12"
             style={{
               boxShadow:
                 "0 1px 0 rgba(15,23,42,0.02), 0 20px 60px rgba(15,23,42,0.08), 0 0 0 1px rgba(15,23,42,0.02)",
             }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-                  <Ruler className="h-5 w-5" aria-hidden="true" />
+                  <Ruler className="h-5 w-5 stroke-[1.5]" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold">Schüco Living 82 MD</h3>
@@ -101,7 +139,7 @@ export function EngineeringPrecision() {
             <motion.div variants={fadeInUp}>
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-                  <Layers3 className="h-6 w-6" aria-hidden="true" />
+                  <Layers3 className="h-6 w-6 stroke-[1.5]" aria-hidden="true" />
                 </div>
                 <h3 className="text-2xl font-bold tracking-tight">
                   Précision Millimétrée
@@ -127,7 +165,7 @@ export function EngineeringPrecision() {
             <motion.div variants={fadeInUp}>
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-                  <Ruler className="h-6 w-6" aria-hidden="true" />
+                  <Ruler className="h-6 w-6 stroke-[1.5]" aria-hidden="true" />
                 </div>
                 <h3 className="text-2xl font-bold tracking-tight">
                   Expertise Technique

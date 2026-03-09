@@ -3,6 +3,7 @@ import { AtelierSectionV2 } from "@/components/home/atelier-v2";
 import { ContactInlineV2 } from "@/components/home/contact-inline-v2";
 import { EngineeringPrecision } from "@/components/home/engineering-precision";
 import { EspritSofarau } from "@/components/home/esprit-sofarau";
+import { IndustrialVision } from "@/components/home/industrial-vision";
 import { TechBentoV2 } from "@/components/home/tech-bento-v2";
 import { ZeroConcurrenceV2 } from "@/components/home/zero-concurrence-v2";
 import { FlowDiagram } from "@/components/industrial-capacity/flow-diagram";
@@ -12,6 +13,7 @@ export default function Home() {
   return (
     <div>
       <Hero />
+      <IndustrialVision />
       <EngineeringPrecision />
       <PerformanceGrid />
       <ZeroConcurrenceV2 />
