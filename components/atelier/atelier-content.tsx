@@ -39,7 +39,7 @@ export function AtelierContent() {
           className="max-w-3xl"
         >
           <div className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
-            L'Atelier
+            L&rsquo;Atelier
           </div>
           <h1 className="mt-4 text-4xl font-bold tracking-tight md:text-6xl">
             Capacité de Production

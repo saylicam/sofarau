@@ -25,7 +25,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -187,7 +187,7 @@ export function AtelierSectionV2() {
               className="rounded-full border-indigo-200 bg-white/80 px-8 hover:border-indigo-400 hover:bg-indigo-50"
             >
               <Link href="/atelier" className="flex items-center gap-2">
-                Découvrir l'atelier
+                Découvrir l&rsquo;atelier
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
