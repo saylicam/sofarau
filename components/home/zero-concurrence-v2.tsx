@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Package, Target, Users } from "lucide-react";
+import { Package, Target, Users } from "lucide-react";
 
 const containerVariants = {
   hidden: { opacity: 0 },
