@@ -45,9 +45,9 @@ const blueprintPoints: BlueprintPoint[] = [
 
 export function SchucoBlueprint() {
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: svgRef,
+    target: containerRef,
     offset: ["start end", "end start"],
   });
 

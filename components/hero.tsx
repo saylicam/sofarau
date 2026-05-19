@@ -17,12 +17,7 @@ function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; dura
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   useEffect(() => {
-    if (shouldReduceMotion) {
-      setCount(end);
-      return;
-    }
-
-    if (!isInView) return;
+    if (shouldReduceMotion || !isInView) return;
 
     let startTime: number | null = null;
     const animate = (currentTime: number) => {
@@ -42,7 +37,7 @@ function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; dura
     requestAnimationFrame(animate);
   }, [isInView, end, duration, shouldReduceMotion]);
 
-  return <span ref={ref}>{count}{suffix}</span>;
+  return <span ref={ref}>{shouldReduceMotion ? end : count}{suffix}</span>;
 }
 
 export function Hero() {
