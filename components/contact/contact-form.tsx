@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Shield } from "lucide-react";
 
@@ -51,6 +51,29 @@ export function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  useEffect(() => {
+    const draft = window.sessionStorage.getItem("sofarau-contact-draft");
+
+    if (!draft) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(draft) as Partial<typeof formData>;
+
+      setFormData((prev) => ({
+        ...prev,
+        company: sanitizeInput(parsed.company ?? ""),
+        vat: sanitizeInput(parsed.vat ?? ""),
+        message: sanitizeInput(parsed.message ?? ""),
+      }));
+    } catch {
+      // Ignore les brouillons corrompus afin de ne jamais bloquer le formulaire.
+    } finally {
+      window.sessionStorage.removeItem("sofarau-contact-draft");
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -131,7 +154,7 @@ export function ContactForm() {
         phone: "",
         message: "",
       });
-    } catch (error) {
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -296,7 +319,7 @@ export function ContactForm() {
 
               <div className="rounded-md border bg-muted/40 p-3 text-xs text-muted-foreground">
                 <strong>Rappel :</strong> Ce site ne propose pas de pose chez le client final
-                et n'affiche aucun prix. Les demandes grand public ne sont pas traitées.
+                et n&apos;affiche aucun prix. Les demandes grand public ne sont pas traitées.
                 Toutes les données sont sécurisées et traitées conformément au RGPD.
               </div>
 

@@ -50,25 +50,23 @@ const hotspots: Hotspot[] = [
 
 export function SchucoBlueprintInteractive() {
   const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: svgRef,
+    target: containerRef,
     offset: ["start end", "end start"],
   });
 
   const pathProgress = useTransform(scrollYProgress, [0, 0.6, 1], [0, 1, 1]);
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl border border-indigo-200/40 bg-gradient-to-br from-white via-indigo-50/20 to-white p-8 backdrop-blur-sm md:p-12">
+    <div ref={containerRef} className="relative w-full overflow-hidden rounded-2xl border border-indigo-200/40 bg-gradient-to-br from-white via-indigo-50/20 to-white p-8 backdrop-blur-sm md:p-12">
       {/* Glassmorphism overlay */}
       <div className="absolute inset-0 rounded-2xl bg-white/40 backdrop-blur-md" />
       
       <div className="relative">
         <svg
-          ref={svgRef}
           viewBox="0 0 100 100"
-          className="w-full h-auto"
-          style={{ maxHeight: "700px", minHeight: "500px" }}
+          className="h-auto max-h-[700px] min-h-[280px] w-full sm:min-h-[360px] md:min-h-[500px]"
           preserveAspectRatio="xMidYMid meet"
         >
           <defs>
@@ -253,9 +251,27 @@ export function SchucoBlueprintInteractive() {
                 fill="rgb(99, 102, 241)"
                 stroke="white"
                 strokeWidth="0.5"
-                className="cursor-pointer"
+                className="cursor-pointer outline-none"
+                tabIndex={0}
+                role="button"
+                aria-label={`${hotspot.label}: ${hotspot.description}`}
                 onMouseEnter={() => setHoveredHotspot(hotspot.id)}
                 onMouseLeave={() => setHoveredHotspot(null)}
+                onFocus={() => setHoveredHotspot(hotspot.id)}
+                onBlur={() => setHoveredHotspot(null)}
+                onClick={() =>
+                  setHoveredHotspot((current) =>
+                    current === hotspot.id ? null : hotspot.id
+                  )
+                }
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setHoveredHotspot((current) =>
+                      current === hotspot.id ? null : hotspot.id
+                    );
+                  }
+                }}
                 animate={{
                   scale: hoveredHotspot === hotspot.id ? [1, 1.3, 1] : 1,
                   opacity: hoveredHotspot === hotspot.id ? [0.8, 1, 0.8] : 0.8,
