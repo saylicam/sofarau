@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight, FileText, Play } from "lucide-react";
 
@@ -11,11 +11,17 @@ import { Button } from "@/components/ui/button";
 
 // Composant pour les compteurs animés
 function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; duration?: number; suffix?: string }) {
+  const shouldReduceMotion = useReducedMotion();
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   useEffect(() => {
+    if (shouldReduceMotion) {
+      setCount(end);
+      return;
+    }
+
     if (!isInView) return;
 
     let startTime: number | null = null;
@@ -34,38 +40,45 @@ function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; dura
     };
 
     requestAnimationFrame(animate);
-  }, [isInView, end, duration]);
+  }, [isInView, end, duration, shouldReduceMotion]);
 
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
 export function Hero() {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <section className="relative min-h-[90vh] overflow-hidden bg-white">
       {/* Container vidéo plein écran */}
       <div className="absolute inset-0 z-0">
         <div className="relative h-full w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
-          {/* Vidéo en arrière-plan */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="h-full w-full object-cover"
-            style={{ objectFit: "cover" }}
-          >
-            {/* Remplacez "/videos/hero-video.mp4" par le chemin de votre vidéo */}
-            <source src="/videos/hero-video.mp4" type="video/mp4" />
-            {/* Fallback pour navigateurs qui ne supportent pas la vidéo */}
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">
+          {shouldReduceMotion ? (
+            <div
+              className="flex h-full w-full items-center justify-center bg-cover bg-center"
+              style={{ backgroundImage: "url('/videos/hero-poster.webp')" }}
+            >
               <div className="rounded-2xl border-2 border-dashed border-primary/20 bg-muted/30 p-16 text-center">
                 <Play className="mx-auto h-16 w-16 text-primary/40" aria-hidden="true" />
                 <p className="mt-4 text-sm font-medium text-muted-foreground">
-                  Vidéo non disponible
+                  Aperçu industriel
                 </p>
               </div>
             </div>
-          </video>
+          ) : (
+            <video
+              aria-hidden="true"
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster="/videos/hero-poster.webp"
+              preload="metadata"
+              className="h-full w-full object-cover"
+            >
+              <source src="/videos/hero-video.mp4" type="video/mp4" />
+            </video>
+          )}
           {/* Overlay sombre avec dégradé pour améliorer la lisibilité */}
           <div
             className="absolute inset-0"
@@ -91,7 +104,7 @@ export function Hero() {
               variant="outline"
               className="border-white/20 bg-white/10 backdrop-blur-md text-white"
             >
-              Light Mode Premium
+              Fabrication 100% usine
             </Badge>
             <Badge
               variant="outline"

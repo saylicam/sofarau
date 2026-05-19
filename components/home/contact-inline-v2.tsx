@@ -1,5 +1,6 @@
 "use client";
 
+import type { FormEvent } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Building2, IdCard, ArrowRight } from "lucide-react";
@@ -32,6 +33,20 @@ const itemVariants = {
 };
 
 export function ContactInlineV2() {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const draft = {
+      company: String(formData.get("company") ?? ""),
+      vat: String(formData.get("vat") ?? ""),
+      message: String(formData.get("message") ?? ""),
+    };
+
+    window.sessionStorage.setItem("sofarau-contact-draft", JSON.stringify(draft));
+    window.location.href = "/contact-pro";
+  };
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-slate-50/50 to-white">
       {/* Dot Pattern Background */}
@@ -74,7 +89,7 @@ export function ContactInlineV2() {
 
             {/* Formulaire Massif */}
             <motion.div variants={itemVariants} className="md:col-span-7">
-              <form className="grid gap-6">
+              <form className="grid gap-6" onSubmit={handleSubmit}>
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="grid gap-3">
                     <label
@@ -130,10 +145,10 @@ export function ContactInlineV2() {
                 </div>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Button
-                    type="button"
+                    type="submit"
                     className="h-14 rounded-full px-8 text-base font-semibold"
                   >
-                    Envoyer la demande
+                    Continuer la demande
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                   <div className="text-sm text-muted-foreground">
