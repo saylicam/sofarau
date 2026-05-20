@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { Target, Eye, Handshake, ArrowRight, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -17,7 +17,7 @@ const containerVariants = {
   },
 };
 
-const textVariants = {
+const textVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
@@ -29,7 +29,7 @@ const textVariants = {
   },
 };
 
-const slowFadeVariants = {
+const slowFadeVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
