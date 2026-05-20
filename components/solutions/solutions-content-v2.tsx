@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, type Variants } from "framer-motion";
 import { useRef } from "react";
 import { ShieldCheck, Sparkles, Thermometer, Volume2, Lock } from "lucide-react";
 
@@ -15,7 +15,7 @@ import {
   PorteGarageIcon,
 } from "@/components/icons/architectural-icons";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -26,7 +26,7 @@ const containerVariants = {
   },
 };
 
-const fadeInUp = {
+const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
@@ -296,7 +296,7 @@ export function SolutionsContentV2() {
               Précision Industrielle
             </h2>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
-              Fabrication sur mesure pour tous types d'ouvertures. Soutien
+              Fabrication sur mesure pour tous types d&apos;ouvertures. Soutien
               Logistique adapté à vos besoins.
             </p>
           </motion.div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ArrowRight, FileText, Play } from "lucide-react";
+import { ArrowRight, FileText } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -45,26 +45,27 @@ export function Hero() {
       {/* Container vidéo plein écran */}
       <div className="absolute inset-0 z-0">
         <div className="relative h-full w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
-          {/* Vidéo en arrière-plan */}
+          {/* Vidéo en arrière-plan, limitée au desktop pour préserver le chargement mobile. */}
           <video
             autoPlay
             loop
             muted
             playsInline
-            className="h-full w-full object-cover"
-            style={{ objectFit: "cover" }}
+            preload="metadata"
+            poster="/videos/hero-poster.jpg"
+            className="pointer-events-none h-full w-full object-cover"
+            aria-hidden="true"
           >
-            {/* Remplacez "/videos/hero-video.mp4" par le chemin de votre vidéo */}
-            <source src="/videos/hero-video.mp4" type="video/mp4" />
-            {/* Fallback pour navigateurs qui ne supportent pas la vidéo */}
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">
-              <div className="rounded-2xl border-2 border-dashed border-primary/20 bg-muted/30 p-16 text-center">
-                <Play className="mx-auto h-16 w-16 text-primary/40" aria-hidden="true" />
-                <p className="mt-4 text-sm font-medium text-muted-foreground">
-                  Vidéo non disponible
-                </p>
-              </div>
-            </div>
+            <source
+              src="/videos/hero-video.webm"
+              type="video/webm"
+              media="(min-width: 768px)"
+            />
+            <source
+              src="/videos/hero-video.mp4"
+              type="video/mp4"
+              media="(min-width: 768px)"
+            />
           </video>
           {/* Overlay sombre avec dégradé pour améliorer la lisibilité */}
           <div
