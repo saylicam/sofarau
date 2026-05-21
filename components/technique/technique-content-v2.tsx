@@ -662,7 +662,7 @@ export function TechniqueContentV2() {
                         >
                           <Link href="/contact-pro" className="flex items-center justify-center gap-2">
                             <Download className="h-4 w-4" />
-                            Demander l'accès
+                            Demander l&apos;accès
                           </Link>
                         </Button>
                       </CardContent>
