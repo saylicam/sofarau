@@ -43,7 +43,7 @@ const fadeInUp = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -533,7 +533,7 @@ export function TechniqueContentV2() {
                   </div>
                 </div>
                 <AnimatedProgressBar
-                  label="Pression d&apos;eau"
+                  label="Pression d'eau"
                   value={900}
                   max={1000}
                   color="blue"
@@ -571,11 +571,11 @@ export function TechniqueContentV2() {
                 Documentation Premium
               </div>
               <h2 className="mt-6 text-3xl font-bold tracking-tight md:text-5xl">
-                Zone de Téléchargement
+                Documentation sur Demande
               </h2>
               <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
                 Accès aux dossiers techniques complets. Plans CAD, certificats, fiches
-                environnementales.
+                environnementales, transmis après validation B2B.
               </p>
             </motion.div>
 
@@ -584,12 +584,12 @@ export function TechniqueContentV2() {
                 {
                   icon: FileCode,
                   title: "Plans CAD",
-                  description: "Fichiers DWG, DXF. Cotes précises, détails d&apos;exécution.",
+                  description: "Fichiers DWG, DXF. Cotes précises, détails d'exécution.",
                   color: "indigo",
                 },
                 {
                   icon: Award,
-                  title: "Certificats d&apos;Essais",
+                  title: "Certificats d'Essais",
                   description: "Rapports de tests validés. Conformité européenne garantie.",
                   color: "blue",
                 },
@@ -662,7 +662,7 @@ export function TechniqueContentV2() {
                         >
                           <Link href="/contact-pro" className="flex items-center justify-center gap-2">
                             <Download className="h-4 w-4" />
-                            Télécharger
+                            Demander l&apos;accès
                           </Link>
                         </Button>
                       </CardContent>

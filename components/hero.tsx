@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
@@ -36,27 +37,52 @@ function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; dura
     requestAnimationFrame(animate);
   }, [isInView, end, duration]);
 
-  return <span ref={ref}>{count}{suffix}</span>;
+  return (
+    <span ref={ref} className="inline-block min-w-[4ch] tabular-nums">
+      {count}
+      {suffix}
+    </span>
+  );
 }
 
 export function Hero() {
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [hasVideoFailed, setHasVideoFailed] = useState(false);
+
   return (
     <section className="relative min-h-[90vh] overflow-hidden bg-white">
       {/* Container vidéo plein écran */}
       <div className="absolute inset-0 z-0">
         <div className="relative h-full w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
-          {/* Vidéo en arrière-plan */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="h-full w-full object-cover"
-            style={{ objectFit: "cover" }}
-          >
-            {/* Remplacez "/videos/hero-video.mp4" par le chemin de votre vidéo */}
-            <source src="/videos/hero-video.mp4" type="video/mp4" />
-            {/* Fallback pour navigateurs qui ne supportent pas la vidéo */}
+          <Image
+            src="/images/hero-poster.webp"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className={`object-cover transition-opacity duration-700 ${
+              isVideoReady ? "opacity-0" : "opacity-100"
+            }`}
+            aria-hidden="true"
+          />
+          {!hasVideoFailed ? (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              poster="/images/hero-poster.webp"
+              className={`h-full w-full object-cover transition-opacity duration-700 ${
+                isVideoReady ? "opacity-100" : "opacity-0"
+              }`}
+              onCanPlay={() => setIsVideoReady(true)}
+              onError={() => setHasVideoFailed(true)}
+              aria-hidden="true"
+            >
+              <source src="/videos/hero-video.mp4" type="video/mp4" />
+            </video>
+          ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">
               <div className="rounded-2xl border-2 border-dashed border-primary/20 bg-muted/30 p-16 text-center">
                 <Play className="mx-auto h-16 w-16 text-primary/40" aria-hidden="true" />
@@ -65,7 +91,7 @@ export function Hero() {
                 </p>
               </div>
             </div>
-          </video>
+          )}
           {/* Overlay sombre avec dégradé pour améliorer la lisibilité */}
           <div
             className="absolute inset-0"
@@ -80,18 +106,13 @@ export function Hero() {
 
       {/* Contenu principal */}
       <div className="relative z-20 mx-auto max-w-7xl px-4 py-20 md:py-32">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="max-w-4xl"
-        >
+        <div className="max-w-4xl">
           <div className="flex flex-wrap items-center gap-2">
             <Badge
               variant="outline"
               className="border-white/20 bg-white/10 backdrop-blur-md text-white"
             >
-              Light Mode Premium
+              Fabrication usine
             </Badge>
             <Badge
               variant="outline"
@@ -133,7 +154,7 @@ export function Hero() {
               </Link>
             </Button>
           </div>
-        </motion.div>
+        </div>
 
         {/* Compteurs de stats animés */}
         <motion.div
