@@ -51,6 +51,8 @@ export function Hero() {
             loop
             muted
             playsInline
+            preload="metadata"
+            aria-hidden="true"
             className="h-full w-full object-cover"
             style={{ objectFit: "cover" }}
           >

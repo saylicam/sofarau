@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Building2, IdCard, ArrowRight } from "lucide-react";
 
@@ -32,6 +33,13 @@ const itemVariants = {
 };
 
 export function ContactInlineV2() {
+  const router = useRouter();
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    router.push("/contact-pro");
+  }
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-slate-50/50 to-white">
       {/* Dot Pattern Background */}
@@ -74,7 +82,7 @@ export function ContactInlineV2() {
 
             {/* Formulaire Massif */}
             <motion.div variants={itemVariants} className="md:col-span-7">
-              <form className="grid gap-6">
+              <form className="grid gap-6" onSubmit={handleSubmit}>
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="grid gap-3">
                     <label
@@ -130,7 +138,7 @@ export function ContactInlineV2() {
                 </div>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Button
-                    type="button"
+                    type="submit"
                     className="h-14 rounded-full px-8 text-base font-semibold"
                   >
                     Envoyer la demande
