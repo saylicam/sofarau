@@ -33,7 +33,7 @@ const cardVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -65,7 +65,7 @@ function BentoCardV2({
         transition: { duration: 0.2, ease: "easeOut" },
       }}
       className={cn(
-        "group relative rounded-3xl border border-slate-200/60 bg-white p-8 transition-all duration-300 hover:border-indigo-400/60",
+        "group relative flex flex-col rounded-3xl border border-slate-200/60 bg-white p-8 transition-all duration-300 hover:border-indigo-400/60",
         height,
         className,
       )}
@@ -117,7 +117,7 @@ function BentoCardV2({
       ) : null}
 
       {link ? (
-        <div className="absolute bottom-8 left-8 right-8">
+        <div className="mt-auto pt-8">
           <div className="mb-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
           <Button
             asChild
@@ -270,7 +270,7 @@ export function TechBentoV2() {
                 scale: 1.02,
                 transition: { duration: 0.2, ease: "easeOut" },
               }}
-              className="relative h-full rounded-3xl border border-slate-200/60 bg-white p-8 transition-all duration-300 hover:border-indigo-400/60 md:h-[420px]"
+              className="relative flex h-full flex-col rounded-3xl border border-slate-200/60 bg-white p-8 transition-all duration-300 hover:border-indigo-400/60 md:h-[420px]"
               style={{
                 boxShadow:
                   "0 1px 0 rgba(15,23,42,0.02), 0 20px 60px rgba(15,23,42,0.08), 0 0 0 1px rgba(15,23,42,0.02)",
@@ -312,7 +312,7 @@ export function TechBentoV2() {
                 ))}
               </div>
 
-              <div className="absolute bottom-8 left-8 right-8">
+              <div className="mt-auto pt-8">
                 <div className="mb-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Button asChild className="flex-1 rounded-full">

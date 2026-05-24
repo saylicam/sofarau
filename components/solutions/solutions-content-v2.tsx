@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { ShieldCheck, Sparkles, Thermometer, Volume2, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -33,7 +32,7 @@ const fadeInUp = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -65,7 +64,7 @@ function BentoCardV2({
         transition: { duration: 0.2, ease: "easeOut" },
       }}
       className={cn(
-        "group relative rounded-2xl border-2 border-indigo-200 bg-white p-8 transition-all duration-300 hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]",
+        "group relative flex flex-col rounded-2xl border-2 border-indigo-200 bg-white p-8 transition-all duration-300 hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]",
         height,
         className,
       )}
@@ -119,7 +118,7 @@ function BentoCardV2({
       ) : null}
 
       {link ? (
-        <div className="absolute bottom-8 left-8 right-8">
+        <div className="mt-auto pt-8">
           <div className="mb-4 h-px bg-gradient-to-r from-transparent via-indigo-200 to-transparent" />
           <Button
             asChild
@@ -135,14 +134,6 @@ function BentoCardV2({
 }
 
 export function SolutionsContentV2() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, -30]);
-
   return (
     <div className="bg-white">
       {/* Hero Section */}
@@ -177,9 +168,8 @@ export function SolutionsContentV2() {
         </motion.div>
       </section>
 
-      {/* Bento Grid Principal avec parallaxe */}
+      {/* Bento Grid Principal */}
       <section
-        ref={sectionRef}
         className="relative overflow-hidden bg-gradient-to-b from-slate-50/50 to-white"
       >
         <div
@@ -192,7 +182,6 @@ export function SolutionsContentV2() {
         />
 
         <motion.div
-          style={{ y: parallaxY }}
           className="relative mx-auto max-w-7xl px-4 py-32 md:py-48"
         >
           <motion.div
@@ -296,7 +285,7 @@ export function SolutionsContentV2() {
               Précision Industrielle
             </h2>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
-              Fabrication sur mesure pour tous types d'ouvertures. Soutien
+              Fabrication sur mesure pour tous types d&apos;ouvertures. Soutien
               Logistique adapté à vos besoins.
             </p>
           </motion.div>

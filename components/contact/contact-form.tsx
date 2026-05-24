@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Shield } from "lucide-react";
 
@@ -39,18 +39,36 @@ function sanitizeInput(input: string): string {
     .trim();
 }
 
+const emptyFormData = {
+  company: "",
+  name: "",
+  email: "",
+  vat: "",
+  phone: "",
+  message: "",
+};
+
 export function ContactForm() {
-  const [formData, setFormData] = useState({
-    company: "",
-    name: "",
-    email: "",
-    vat: "",
-    phone: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState(emptyFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const company = sanitizeInput(searchParams.get("company") ?? "");
+    const vat = sanitizeInput(searchParams.get("vat") ?? "");
+    const message = sanitizeInput(searchParams.get("message") ?? "");
+
+    if (company || vat || message) {
+      setFormData((prev) => ({
+        ...prev,
+        company,
+        vat,
+        message,
+      }));
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -123,15 +141,8 @@ export function ContactForm() {
       // });
       
       setSubmitStatus("success");
-      setFormData({
-        company: "",
-        name: "",
-        email: "",
-        vat: "",
-        phone: "",
-        message: "",
-      });
-    } catch (error) {
+      setFormData(emptyFormData);
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -296,7 +307,7 @@ export function ContactForm() {
 
               <div className="rounded-md border bg-muted/40 p-3 text-xs text-muted-foreground">
                 <strong>Rappel :</strong> Ce site ne propose pas de pose chez le client final
-                et n'affiche aucun prix. Les demandes grand public ne sont pas traitées.
+                et n&apos;affiche aucun prix. Les demandes grand public ne sont pas traitées.
                 Toutes les données sont sécurisées et traitées conformément au RGPD.
               </div>
 
