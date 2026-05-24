@@ -49,7 +49,7 @@ const hotspots: Hotspot[] = [
 ];
 
 export function SchucoBlueprintInteractive() {
-  const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null);
+  const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const { scrollYProgress } = useScroll({
     target: svgRef,
@@ -68,7 +68,7 @@ export function SchucoBlueprintInteractive() {
           ref={svgRef}
           viewBox="0 0 100 100"
           className="w-full h-auto"
-          style={{ maxHeight: "700px", minHeight: "500px" }}
+          style={{ maxHeight: "700px", minHeight: "clamp(320px, 55vw, 500px)" }}
           preserveAspectRatio="xMidYMid meet"
         >
           <defs>
@@ -245,6 +245,7 @@ export function SchucoBlueprintInteractive() {
           {/* Hotspots interactifs avec animation pulsante */}
           {hotspots.map((hotspot) => (
             <g key={hotspot.id}>
+              <title>{`${hotspot.label}: ${hotspot.description}`}</title>
               {/* Cercle pulsant */}
               <motion.circle
                 cx={hotspot.x}
@@ -254,15 +255,33 @@ export function SchucoBlueprintInteractive() {
                 stroke="white"
                 strokeWidth="0.5"
                 className="cursor-pointer"
-                onMouseEnter={() => setHoveredHotspot(hotspot.id)}
-                onMouseLeave={() => setHoveredHotspot(null)}
+                role="button"
+                tabIndex={0}
+                aria-label={`${hotspot.label}: ${hotspot.description}`}
+                onClick={() =>
+                  setActiveHotspot((current) =>
+                    current === hotspot.id ? null : hotspot.id,
+                  )
+                }
+                onFocus={() => setActiveHotspot(hotspot.id)}
+                onBlur={() => setActiveHotspot(null)}
+                onMouseEnter={() => setActiveHotspot(hotspot.id)}
+                onMouseLeave={() => setActiveHotspot(null)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setActiveHotspot((current) =>
+                      current === hotspot.id ? null : hotspot.id,
+                    );
+                  }
+                }}
                 animate={{
-                  scale: hoveredHotspot === hotspot.id ? [1, 1.3, 1] : 1,
-                  opacity: hoveredHotspot === hotspot.id ? [0.8, 1, 0.8] : 0.8,
+                  scale: activeHotspot === hotspot.id ? [1, 1.3, 1] : 1,
+                  opacity: activeHotspot === hotspot.id ? [0.8, 1, 0.8] : 0.8,
                 }}
                 transition={{
                   duration: 1.5,
-                  repeat: hoveredHotspot === hotspot.id ? Infinity : 0,
+                  repeat: activeHotspot === hotspot.id ? Infinity : 0,
                   ease: "easeInOut",
                 }}
               />
@@ -276,11 +295,11 @@ export function SchucoBlueprintInteractive() {
                 stroke="rgb(99, 102, 241)"
                 strokeWidth="0.3"
                 strokeDasharray="0.5,0.5"
-                opacity={hoveredHotspot === hotspot.id ? 1 : 0.4}
+                opacity={activeHotspot === hotspot.id ? 1 : 0.4}
               />
               
               {/* Info-bulle futuriste */}
-              {hoveredHotspot === hotspot.id && (
+              {activeHotspot === hotspot.id && (
                 <motion.g
                   initial={{ opacity: 0, scale: 0.8, y: 10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}

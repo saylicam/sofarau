@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ArrowRight, FileText, Play } from "lucide-react";
+import { ArrowRight, FileText } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -45,26 +45,27 @@ export function Hero() {
       {/* Container vidéo plein écran */}
       <div className="absolute inset-0 z-0">
         <div className="relative h-full w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
-          {/* Vidéo en arrière-plan */}
+          <div
+            className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(37,99,235,0.18),transparent_32%),linear-gradient(135deg,#0f172a_0%,#1e3a8a_45%,#f8fafc_100%)]"
+            aria-hidden="true"
+          />
+          {/* Vidéo desktop optimisée; le hero reste statique sur mobile pour préserver le LCP. */}
           <video
             autoPlay
             loop
             muted
             playsInline
-            className="h-full w-full object-cover"
+            preload="metadata"
+            poster="/videos/hero-poster.webp"
+            className="hidden h-full w-full object-cover md:block"
             style={{ objectFit: "cover" }}
+            aria-hidden="true"
           >
-            {/* Remplacez "/videos/hero-video.mp4" par le chemin de votre vidéo */}
-            <source src="/videos/hero-video.mp4" type="video/mp4" />
-            {/* Fallback pour navigateurs qui ne supportent pas la vidéo */}
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">
-              <div className="rounded-2xl border-2 border-dashed border-primary/20 bg-muted/30 p-16 text-center">
-                <Play className="mx-auto h-16 w-16 text-primary/40" aria-hidden="true" />
-                <p className="mt-4 text-sm font-medium text-muted-foreground">
-                  Vidéo non disponible
-                </p>
-              </div>
-            </div>
+            <source
+              src="/videos/hero-video.mp4"
+              type="video/mp4"
+              media="(min-width: 768px)"
+            />
           </video>
           {/* Overlay sombre avec dégradé pour améliorer la lisibilité */}
           <div
@@ -107,7 +108,7 @@ export function Hero() {
             </Badge>
           </div>
 
-          <h1 className="mt-8 text-5xl font-bold tracking-tight text-white md:text-7xl lg:text-8xl">
+          <h1 className="mt-8 text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-7xl lg:text-8xl">
             L&rsquo;ING&Eacute;NIERIE DU REGARD
           </h1>
           <p className="mt-6 text-lg leading-8 text-white/90 md:text-xl">

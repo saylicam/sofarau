@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Factory, FileText, Mail, Layers3, Wrench, Eye } from "lucide-react";
@@ -9,6 +9,19 @@ import { Button } from "@/components/ui/button";
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen]);
 
   const menuItems = [
     { href: "/solutions", label: "Solutions", icon: Layers3 },
@@ -66,7 +79,7 @@ export function MobileMenu() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 z-50 h-full w-80 bg-white shadow-2xl"
+              className="fixed right-0 top-0 z-50 h-full w-[min(20rem,calc(100vw-2rem))] bg-white shadow-2xl"
             >
               <div className="flex h-full flex-col">
                 {/* Header */}

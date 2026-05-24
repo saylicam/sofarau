@@ -571,11 +571,11 @@ export function TechniqueContentV2() {
                 Documentation Premium
               </div>
               <h2 className="mt-6 text-3xl font-bold tracking-tight md:text-5xl">
-                Zone de Téléchargement
+                Documentation sur demande
               </h2>
               <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
-                Accès aux dossiers techniques complets. Plans CAD, certificats, fiches
-                environnementales.
+                Accès aux dossiers techniques complets via le portail pro. Plans
+                CAD, certificats, fiches environnementales.
               </p>
             </motion.div>
 
@@ -662,7 +662,7 @@ export function TechniqueContentV2() {
                         >
                           <Link href="/contact-pro" className="flex items-center justify-center gap-2">
                             <Download className="h-4 w-4" />
-                            Télécharger
+                            Demander l&apos;accès
                           </Link>
                         </Button>
                       </CardContent>

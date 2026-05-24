@@ -129,8 +129,8 @@ export function EngineeringPrecision() {
               <SchucoBlueprintInteractive />
             </div>
             <p className="mt-6 text-center text-xs text-muted-foreground">
-              Survolez les points d&apos;ancrage pour découvrir les détails
-              techniques
+              Cliquez, touchez ou survolez les points d&apos;ancrage pour
+              découvrir les détails techniques
             </p>
           </motion.div>
 
