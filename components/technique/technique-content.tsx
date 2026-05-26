@@ -184,7 +184,7 @@ export function TechniqueContent() {
                         variant="ghost"
                         className="mt-6 w-full rounded-full"
                       >
-                        <Link href="/contact-pro">
+                        <Link href="#fiches-techniques">
                           Voir les données
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
@@ -199,7 +199,10 @@ export function TechniqueContent() {
       </section>
 
       {/* Section Fiches PDF */}
-      <section className="relative overflow-hidden bg-white">
+      <section
+        id="fiches-techniques"
+        className="relative scroll-mt-24 overflow-hidden bg-white"
+      >
         <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
