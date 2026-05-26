@@ -65,7 +65,7 @@ function BentoCardV2({
         transition: { duration: 0.2, ease: "easeOut" },
       }}
       className={cn(
-        "group relative rounded-2xl border-2 border-indigo-200 bg-white p-8 transition-all duration-300 hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]",
+        "group relative flex flex-col rounded-2xl border-2 border-indigo-200 bg-white p-8 transition-all duration-300 hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]",
         height,
         className,
       )}
@@ -119,7 +119,7 @@ function BentoCardV2({
       ) : null}
 
       {link ? (
-        <div className="absolute bottom-8 left-8 right-8">
+        <div className="mt-auto pt-6">
           <div className="mb-4 h-px bg-gradient-to-r from-transparent via-indigo-200 to-transparent" />
           <Button
             asChild
@@ -296,7 +296,7 @@ export function SolutionsContentV2() {
               Précision Industrielle
             </h2>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
-              Fabrication sur mesure pour tous types d'ouvertures. Soutien
+              Fabrication sur mesure pour tous types d&apos;ouvertures. Soutien
               Logistique adapté à vos besoins.
             </p>
           </motion.div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Factory, FileText, Mail, Layers3, Wrench, Eye } from "lucide-react";
@@ -9,6 +9,17 @@ import { Button } from "@/components/ui/button";
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen]);
 
   const menuItems = [
     { href: "/solutions", label: "Solutions", icon: Layers3 },
@@ -22,9 +33,9 @@ export function MobileMenu() {
     <>
       {/* Bouton Burger */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border bg-white/80 backdrop-blur-sm transition-colors hover:bg-white"
-        aria-label="Menu"
+        onClick={() => setIsOpen((open) => !open)}
+        className="relative z-[70] flex h-10 w-10 items-center justify-center rounded-full border bg-white/80 backdrop-blur-sm transition-colors hover:bg-white"
+        aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
         aria-expanded={isOpen}
       >
         <div className="relative h-5 w-5">
@@ -56,7 +67,7 @@ export function MobileMenu() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+              className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm"
               onClick={() => setIsOpen(false)}
             />
 
@@ -66,7 +77,7 @@ export function MobileMenu() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 z-50 h-full w-80 bg-white shadow-2xl"
+              className="fixed right-0 top-0 z-[70] h-full w-full max-w-sm bg-white shadow-2xl"
             >
               <div className="flex h-full flex-col">
                 {/* Header */}

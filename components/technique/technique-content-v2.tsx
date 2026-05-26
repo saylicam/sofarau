@@ -257,7 +257,7 @@ export function TechniqueContentV2() {
                         variant="ghost"
                         className="mt-6 w-full rounded-full"
                       >
-                        <Link href="/contact-pro">
+                        <Link href="#donnees-techniques">
                           Voir les données
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
@@ -272,7 +272,10 @@ export function TechniqueContentV2() {
       </section>
 
       {/* Section Schémas Techniques Diversifiés */}
-      <section className="relative overflow-hidden bg-white">
+      <section
+        id="donnees-techniques"
+        className="relative scroll-mt-24 overflow-hidden bg-white"
+      >
         <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
@@ -661,8 +664,8 @@ export function TechniqueContentV2() {
                           className={`w-full rounded-full ${colors.border} ${colors.hover}`}
                         >
                           <Link href="/contact-pro" className="flex items-center justify-center gap-2">
-                            <Download className="h-4 w-4" />
-                            Télécharger
+                            <ArrowRight className="h-4 w-4" />
+                            Demander l&apos;accès
                           </Link>
                         </Button>
                       </CardContent>
