@@ -8,7 +8,7 @@ export function ThermalCard() {
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
       className="relative overflow-hidden rounded-2xl border border-indigo-200/40 bg-gradient-to-br from-white/80 via-blue-50/30 to-white/80 p-8 backdrop-blur-xl md:p-10"
       style={{
         boxShadow:
