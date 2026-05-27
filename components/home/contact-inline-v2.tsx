@@ -74,7 +74,7 @@ export function ContactInlineV2() {
 
             {/* Formulaire Massif */}
             <motion.div variants={itemVariants} className="md:col-span-7">
-              <form className="grid gap-6">
+              <form action="/contact-pro" method="get" className="grid gap-6">
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="grid gap-3">
                     <label
@@ -130,7 +130,7 @@ export function ContactInlineV2() {
                 </div>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Button
-                    type="button"
+                    type="submit"
                     className="h-14 rounded-full px-8 text-base font-semibold"
                   >
                     Envoyer la demande

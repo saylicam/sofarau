@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Shield } from "lucide-react";
 
@@ -51,6 +51,24 @@ export function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const company = params.get("company");
+    const vat = params.get("vat");
+    const message = params.get("message");
+
+    if (!company && !vat && !message) {
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      company: company ? sanitizeInput(company) : prev.company,
+      vat: vat ? sanitizeInput(vat) : prev.vat,
+      message: message ? sanitizeInput(message) : prev.message,
+    }));
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
