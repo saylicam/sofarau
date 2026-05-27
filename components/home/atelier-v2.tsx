@@ -187,7 +187,7 @@ export function AtelierSectionV2() {
               className="rounded-full border-indigo-200 bg-white/80 px-8 hover:border-indigo-400 hover:bg-indigo-50"
             >
               <Link href="/atelier" className="flex items-center gap-2">
-                Découvrir l'atelier
+                Découvrir l&apos;atelier
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
