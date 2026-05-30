@@ -26,7 +26,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -130,11 +130,13 @@ export function ContactInlineV2() {
                 </div>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Button
-                    type="button"
+                    asChild
                     className="h-14 rounded-full px-8 text-base font-semibold"
                   >
-                    Envoyer la demande
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <Link href="/contact-pro">
+                      Accéder au formulaire pro
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
                   </Button>
                   <div className="text-sm text-muted-foreground">
                     Ou utilisez la page{" "}

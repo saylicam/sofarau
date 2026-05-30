@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 
 interface Hotspot {
   id: string;
@@ -49,14 +48,7 @@ const hotspots: Hotspot[] = [
 ];
 
 export function SchucoBlueprintInteractive() {
-  const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: svgRef,
-    offset: ["start end", "end start"],
-  });
-
-  const pathProgress = useTransform(scrollYProgress, [0, 0.6, 1], [0, 1, 1]);
+  const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
 
   return (
     <div className="relative w-full overflow-hidden rounded-2xl border border-indigo-200/40 bg-gradient-to-br from-white via-indigo-50/20 to-white p-8 backdrop-blur-sm md:p-12">
@@ -65,10 +57,9 @@ export function SchucoBlueprintInteractive() {
       
       <div className="relative">
         <svg
-          ref={svgRef}
           viewBox="0 0 100 100"
-          className="w-full h-auto"
-          style={{ maxHeight: "700px", minHeight: "500px" }}
+          className="h-auto min-h-[320px] w-full md:min-h-[500px]"
+          style={{ maxHeight: "700px" }}
           preserveAspectRatio="xMidYMid meet"
         >
           <defs>
@@ -103,11 +94,7 @@ export function SchucoBlueprintInteractive() {
           <rect width="100" height="100" fill="url(#technical-grid)" />
 
           {/* Schéma de coupe technique - Lignes principales animées */}
-          <motion.g
-            style={{
-              opacity: pathProgress,
-            }}
-          >
+          <motion.g>
             {/* Contour extérieur */}
             <motion.rect
               x="15"
@@ -254,15 +241,33 @@ export function SchucoBlueprintInteractive() {
                 stroke="white"
                 strokeWidth="0.5"
                 className="cursor-pointer"
-                onMouseEnter={() => setHoveredHotspot(hotspot.id)}
-                onMouseLeave={() => setHoveredHotspot(null)}
+                role="button"
+                tabIndex={0}
+                aria-label={`${hotspot.label} : ${hotspot.description}`}
+                aria-pressed={activeHotspot === hotspot.id}
+                onMouseEnter={() => setActiveHotspot(hotspot.id)}
+                onMouseLeave={() => setActiveHotspot(null)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setActiveHotspot((current) =>
+                    current === hotspot.id ? null : hotspot.id,
+                  );
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setActiveHotspot((current) =>
+                      current === hotspot.id ? null : hotspot.id,
+                    );
+                  }
+                }}
                 animate={{
-                  scale: hoveredHotspot === hotspot.id ? [1, 1.3, 1] : 1,
-                  opacity: hoveredHotspot === hotspot.id ? [0.8, 1, 0.8] : 0.8,
+                  scale: activeHotspot === hotspot.id ? [1, 1.3, 1] : 1,
+                  opacity: activeHotspot === hotspot.id ? [0.8, 1, 0.8] : 0.8,
                 }}
                 transition={{
                   duration: 1.5,
-                  repeat: hoveredHotspot === hotspot.id ? Infinity : 0,
+                  repeat: activeHotspot === hotspot.id ? Infinity : 0,
                   ease: "easeInOut",
                 }}
               />
@@ -276,11 +281,11 @@ export function SchucoBlueprintInteractive() {
                 stroke="rgb(99, 102, 241)"
                 strokeWidth="0.3"
                 strokeDasharray="0.5,0.5"
-                opacity={hoveredHotspot === hotspot.id ? 1 : 0.4}
+                opacity={activeHotspot === hotspot.id ? 1 : 0.4}
               />
               
               {/* Info-bulle futuriste */}
-              {hoveredHotspot === hotspot.id && (
+              {activeHotspot === hotspot.id && (
                 <motion.g
                   initial={{ opacity: 0, scale: 0.8, y: 10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
