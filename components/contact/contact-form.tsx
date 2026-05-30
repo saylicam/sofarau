@@ -111,16 +111,15 @@ export function ContactForm() {
     setSubmitStatus("idle");
 
     try {
-      // Ici, vous connecterez votre endpoint API
-      // Pour l'instant, simulation d'un envoi
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
-      // TODO: Remplacer par un appel API réel
-      // const response = await fetch("/api/contact", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(formData),
-      // });
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Contact request failed");
+      }
       
       setSubmitStatus("success");
       setFormData({
@@ -290,7 +289,7 @@ export function ContactForm() {
                   className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800"
                 >
                   <AlertCircle className="h-4 w-4" />
-                  Une erreur est survenue. Veuillez réessayer.
+                  Le formulaire est momentanément indisponible. Veuillez réessayer plus tard.
                 </motion.div>
               )}
 
