@@ -33,6 +33,11 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
+              <Link href="/vision" className="hover:text-foreground">
+                Vision
+              </Link>
+            </li>
+            <li>
               <Link href="/contact-pro" className="hover:text-foreground">
                 Contact pro
               </Link>
@@ -43,8 +48,11 @@ export function SiteFooter() {
         <div className="space-y-2">
           <div className="text-sm font-semibold">Documents</div>
           <p className="text-sm text-muted-foreground">
-            Fiches techniques (PDF) disponibles sur demande ou via la page
-            Technique.
+            Fiches techniques (PDF) disponibles sur demande ou via la page{" "}
+            <Link href="/technique" className="font-medium hover:text-foreground">
+              Technique
+            </Link>
+            .
           </p>
         </div>
       </div>

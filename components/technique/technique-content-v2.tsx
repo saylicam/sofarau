@@ -43,7 +43,7 @@ const fadeInUp = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -258,7 +258,7 @@ export function TechniqueContentV2() {
                         className="mt-6 w-full rounded-full"
                       >
                         <Link href="/contact-pro">
-                          Voir les données
+                          Demander les données
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       </Button>
@@ -662,7 +662,7 @@ export function TechniqueContentV2() {
                         >
                           <Link href="/contact-pro" className="flex items-center justify-center gap-2">
                             <Download className="h-4 w-4" />
-                            Télécharger
+                            Demander le PDF
                           </Link>
                         </Button>
                       </CardContent>

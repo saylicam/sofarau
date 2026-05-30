@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight, FileText, Play } from "lucide-react";
 
@@ -14,11 +14,18 @@ function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; dura
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
+    if (shouldReduceMotion) {
+      setCount(end);
+      return;
+    }
+
     if (!isInView) return;
 
     let startTime: number | null = null;
+    let frameId: number;
     const animate = (currentTime: number) => {
       if (startTime === null) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / (duration * 1000), 1);
@@ -27,51 +34,69 @@ function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; dura
       setCount(Math.floor(easeOutQuart * end));
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        frameId = requestAnimationFrame(animate);
       } else {
         setCount(end);
       }
     };
 
-    requestAnimationFrame(animate);
-  }, [isInView, end, duration]);
+    frameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frameId);
+  }, [isInView, end, duration, shouldReduceMotion]);
 
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
 export function Hero() {
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [hasVideoError, setHasVideoError] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+  const showVideo = !shouldReduceMotion && !hasVideoError;
+
   return (
     <section className="relative min-h-[90vh] overflow-hidden bg-white">
       {/* Container vidéo plein écran */}
       <div className="absolute inset-0 z-0">
         <div className="relative h-full w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
-          {/* Vidéo en arrière-plan */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="h-full w-full object-cover"
-            style={{ objectFit: "cover" }}
-          >
-            {/* Remplacez "/videos/hero-video.mp4" par le chemin de votre vidéo */}
-            <source src="/videos/hero-video.mp4" type="video/mp4" />
-            {/* Fallback pour navigateurs qui ne supportent pas la vidéo */}
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">
-              <div className="rounded-2xl border-2 border-dashed border-primary/20 bg-muted/30 p-16 text-center">
-                <Play className="mx-auto h-16 w-16 text-primary/40" aria-hidden="true" />
-                <p className="mt-4 text-sm font-medium text-muted-foreground">
-                  Vidéo non disponible
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: "url('/images/hero-poster.webp')" }}
+            aria-hidden="true"
+          />
+          {showVideo ? (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              poster="/images/hero-poster.webp"
+              aria-hidden="true"
+              onLoadedData={() => setIsVideoReady(true)}
+              onError={() => setHasVideoError(true)}
+              className={`h-full w-full object-cover transition-opacity duration-700 ${
+                isVideoReady ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <source src="/videos/hero-video.webm" type="video/webm" />
+              <source src="/videos/hero-video.mp4" type="video/mp4" />
+            </video>
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-50/70 via-white/50 to-slate-50/70">
+              <div className="rounded-2xl border-2 border-dashed border-white/25 bg-black/20 p-8 text-center text-white backdrop-blur-md">
+                <Play className="mx-auto h-12 w-12 text-white/70" aria-hidden="true" />
+                <p className="mt-4 text-sm font-medium">
+                  Aperçu statique de l&apos;atelier
                 </p>
               </div>
             </div>
-          </video>
+          )}
           {/* Overlay sombre avec dégradé pour améliorer la lisibilité */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%)",
+                "linear-gradient(to right, rgba(2, 6, 23, 0.72) 0%, rgba(2, 6, 23, 0.48) 52%, rgba(2, 6, 23, 0.32) 100%), linear-gradient(to top, rgba(2, 6, 23, 0.62) 0%, rgba(2, 6, 23, 0) 48%)",
             }}
             aria-hidden="true"
           />
@@ -155,7 +180,7 @@ export function Hero() {
                 boxShadow: "0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <div className="text-4xl font-bold tracking-tight text-white md:text-5xl">
+              <div className="min-w-[4ch] text-4xl font-bold tracking-tight text-white tabular-nums md:text-5xl">
                 <AnimatedCounter end={stat.value} suffix={stat.suffix} />
               </div>
               <div className="mt-2 text-sm text-white/80">
