@@ -21,10 +21,10 @@ function validateVAT(vat: string): boolean {
     return false;
   }
   
-  // Validation du checksum (algorithme MOD 97)
+  // Validation du checksum belge : les 2 derniers chiffres contrôlent les 8 premiers.
   const digits = cleaned.slice(2);
-  const checkDigits = parseInt(digits.slice(0, 2), 10);
-  const baseNumber = parseInt(digits.slice(2), 10);
+  const baseNumber = parseInt(digits.slice(0, 8), 10);
+  const checkDigits = parseInt(digits.slice(8), 10);
   const remainder = (97 - (baseNumber % 97)) % 97;
   
   return remainder === checkDigits;
@@ -131,7 +131,7 @@ export function ContactForm() {
         phone: "",
         message: "",
       });
-    } catch (error) {
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -296,7 +296,7 @@ export function ContactForm() {
 
               <div className="rounded-md border bg-muted/40 p-3 text-xs text-muted-foreground">
                 <strong>Rappel :</strong> Ce site ne propose pas de pose chez le client final
-                et n'affiche aucun prix. Les demandes grand public ne sont pas traitées.
+                et n&apos;affiche aucun prix. Les demandes grand public ne sont pas traitées.
                 Toutes les données sont sécurisées et traitées conformément au RGPD.
               </div>
 
