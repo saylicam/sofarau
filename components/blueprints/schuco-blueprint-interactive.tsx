@@ -50,7 +50,7 @@ const hotspots: Hotspot[] = [
 
 export function SchucoBlueprintInteractive() {
   const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
+  const svgRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: svgRef,
     offset: ["start end", "end start"],
@@ -63,9 +63,8 @@ export function SchucoBlueprintInteractive() {
       {/* Glassmorphism overlay */}
       <div className="absolute inset-0 rounded-2xl bg-white/40 backdrop-blur-md" />
       
-      <div className="relative">
+      <div ref={svgRef} className="relative">
         <svg
-          ref={svgRef}
           viewBox="0 0 100 100"
           className="w-full h-auto"
           style={{ maxHeight: "700px", minHeight: "500px" }}
