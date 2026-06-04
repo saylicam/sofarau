@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, type Variants, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Clock, Crosshair, Factory, ArrowRight, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -18,7 +18,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
@@ -187,7 +187,7 @@ export function AtelierSectionV2() {
               className="rounded-full border-indigo-200 bg-white/80 px-8 hover:border-indigo-400 hover:bg-indigo-50"
             >
               <Link href="/atelier" className="flex items-center gap-2">
-                Découvrir l'atelier
+                Découvrir l&apos;atelier
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
