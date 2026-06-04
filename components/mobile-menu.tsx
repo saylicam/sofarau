@@ -56,7 +56,7 @@ export function MobileMenu() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+            className="fixed left-0 right-0 top-0 z-40 h-dvh bg-black/50 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
           />
         ) : null}
@@ -72,7 +72,7 @@ export function MobileMenu() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 z-50 h-full w-80 max-w-[calc(100vw-1rem)] bg-white shadow-2xl"
+              className="fixed right-0 top-0 z-50 h-dvh w-80 max-w-[calc(100vw-1rem)] bg-white shadow-2xl"
             >
               <div className="flex h-full flex-col">
                 {/* Header */}
