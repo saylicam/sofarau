@@ -26,6 +26,7 @@ export function MobileMenu() {
         className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border bg-white/80 backdrop-blur-sm transition-colors hover:bg-white"
         aria-label="Menu"
         aria-expanded={isOpen}
+        aria-controls="mobile-navigation"
       >
         <div className="relative h-5 w-5">
           <motion.span
@@ -48,25 +49,30 @@ export function MobileMenu() {
 
       {/* Overlay et Menu */}
       <AnimatePresence>
-        {isOpen && (
-          <>
-            {/* Overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-              onClick={() => setIsOpen(false)}
-            />
+        {isOpen ? (
+          <motion.div
+            key="mobile-menu-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+            onClick={() => setIsOpen(false)}
+          />
+        ) : null}
+      </AnimatePresence>
 
-            {/* Menu Panel */}
+      {/* Menu Panel */}
+      <AnimatePresence>
+        {isOpen ? (
             <motion.div
+              key="mobile-menu-panel"
+              id="mobile-navigation"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 z-50 h-full w-80 bg-white shadow-2xl"
+              className="fixed right-0 top-0 z-50 h-full w-80 max-w-[calc(100vw-1rem)] bg-white shadow-2xl"
             >
               <div className="flex h-full flex-col">
                 {/* Header */}
@@ -135,8 +141,7 @@ export function MobileMenu() {
                 </div>
               </div>
             </motion.div>
-          </>
-        )}
+        ) : null}
       </AnimatePresence>
     </>
   );
