@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Shield } from "lucide-react";
 
@@ -9,10 +9,21 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+const CONTACT_DRAFT_STORAGE_KEY = "sofarau:contact-draft";
+
+const initialFormData = {
+  company: "",
+  name: "",
+  email: "",
+  vat: "",
+  phone: "",
+  message: "",
+};
+
 // Fonction de validation du numéro de TVA (format BE/BE0/BE1/BE2)
 function validateVAT(vat: string): boolean {
-  // Supprimer les espaces et convertir en majuscules
-  const cleaned = vat.replace(/\s/g, "").toUpperCase();
+  // Supprimer les séparateurs courants et convertir en majuscules
+  const cleaned = vat.replace(/[\s.-]/g, "").toUpperCase();
   
   // Format BE suivi de 10 chiffres
   const belgianVATPattern = /^BE[0-9]{10}$/;
@@ -21,11 +32,11 @@ function validateVAT(vat: string): boolean {
     return false;
   }
   
-  // Validation du checksum (algorithme MOD 97)
+  // Validation du checksum belge : les 2 derniers chiffres portent la clé MOD 97.
   const digits = cleaned.slice(2);
-  const checkDigits = parseInt(digits.slice(0, 2), 10);
-  const baseNumber = parseInt(digits.slice(2), 10);
-  const remainder = (97 - (baseNumber % 97)) % 97;
+  const baseNumber = parseInt(digits.slice(0, 8), 10);
+  const checkDigits = parseInt(digits.slice(8), 10);
+  const remainder = 97 - (baseNumber % 97);
   
   return remainder === checkDigits;
 }
@@ -40,17 +51,33 @@ function sanitizeInput(input: string): string {
 }
 
 export function ContactForm() {
-  const [formData, setFormData] = useState({
-    company: "",
-    name: "",
-    email: "",
-    vat: "",
-    phone: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  useEffect(() => {
+    const rawDraft = window.sessionStorage.getItem(CONTACT_DRAFT_STORAGE_KEY);
+
+    if (!rawDraft) {
+      return;
+    }
+
+    try {
+      const draft = JSON.parse(rawDraft) as Partial<typeof initialFormData>;
+
+      setFormData((prev) => ({
+        ...prev,
+        company: sanitizeInput(String(draft.company ?? "")),
+        vat: sanitizeInput(String(draft.vat ?? "")),
+        message: sanitizeInput(String(draft.message ?? "")),
+      }));
+    } catch {
+      // Un brouillon corrompu ne doit pas bloquer l'accès au formulaire.
+    } finally {
+      window.sessionStorage.removeItem(CONTACT_DRAFT_STORAGE_KEY);
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -123,15 +150,8 @@ export function ContactForm() {
       // });
       
       setSubmitStatus("success");
-      setFormData({
-        company: "",
-        name: "",
-        email: "",
-        vat: "",
-        phone: "",
-        message: "",
-      });
-    } catch (error) {
+      setFormData(initialFormData);
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -296,7 +316,7 @@ export function ContactForm() {
 
               <div className="rounded-md border bg-muted/40 p-3 text-xs text-muted-foreground">
                 <strong>Rappel :</strong> Ce site ne propose pas de pose chez le client final
-                et n'affiche aucun prix. Les demandes grand public ne sont pas traitées.
+                et n&apos;affiche aucun prix. Les demandes grand public ne sont pas traitées.
                 Toutes les données sont sécurisées et traitées conformément au RGPD.
               </div>
 

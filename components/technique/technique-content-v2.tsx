@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
+import { motion, type Variants, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import {
   FileText,
@@ -25,7 +25,7 @@ import { SlidingLiftBlueprint } from "@/components/blueprints/sliding-lift-bluep
 import { AcousticGlassBlueprint } from "@/components/blueprints/acoustic-glass-blueprint";
 import { RotoNXBlueprint } from "@/components/blueprints/roto-nx-blueprint";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -36,7 +36,7 @@ const containerVariants = {
   },
 };
 
-const fadeInUp = {
+const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,

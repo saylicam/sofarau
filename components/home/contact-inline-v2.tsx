@@ -1,14 +1,18 @@
 "use client";
 
+import type { FormEvent } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { motion, type Variants } from "framer-motion";
 import { Building2, IdCard, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-const containerVariants = {
+const CONTACT_DRAFT_STORAGE_KEY = "sofarau:contact-draft";
+
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -19,7 +23,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
@@ -32,6 +36,27 @@ const itemVariants = {
 };
 
 export function ContactInlineV2() {
+  const router = useRouter();
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const draft = {
+      company: String(formData.get("company") ?? ""),
+      vat: String(formData.get("vat") ?? ""),
+      message: String(formData.get("message") ?? ""),
+    };
+
+    try {
+      window.sessionStorage.setItem(CONTACT_DRAFT_STORAGE_KEY, JSON.stringify(draft));
+    } catch {
+      // La redirection reste valable si le navigateur refuse le stockage local.
+    }
+
+    router.push("/contact-pro");
+  };
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-slate-50/50 to-white">
       {/* Dot Pattern Background */}
@@ -74,7 +99,7 @@ export function ContactInlineV2() {
 
             {/* Formulaire Massif */}
             <motion.div variants={itemVariants} className="md:col-span-7">
-              <form className="grid gap-6">
+              <form className="grid gap-6" onSubmit={handleSubmit}>
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="grid gap-3">
                     <label
@@ -130,7 +155,7 @@ export function ContactInlineV2() {
                 </div>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Button
-                    type="button"
+                    type="submit"
                     className="h-14 rounded-full px-8 text-base font-semibold"
                   >
                     Envoyer la demande
