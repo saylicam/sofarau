@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { ArrowRight, FileText, Play } from "lucide-react";
+import { ArrowRight, FileText } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+
+const HERO_VIDEO_QUERY = "(min-width: 768px) and (prefers-reduced-motion: no-preference)";
 
 // Composant pour les compteurs animés
 function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; duration?: number; suffix?: string }) {
@@ -40,32 +41,47 @@ function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; dura
 }
 
 export function Hero() {
+  const [shouldPlayVideo, setShouldPlayVideo] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(HERO_VIDEO_QUERY);
+    const syncVideoPreference = () => setShouldPlayVideo(mediaQuery.matches);
+
+    syncVideoPreference();
+    mediaQuery.addEventListener("change", syncVideoPreference);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncVideoPreference);
+    };
+  }, []);
+
   return (
     <section className="relative min-h-[90vh] overflow-hidden bg-white">
       {/* Container vidéo plein écran */}
       <div className="absolute inset-0 z-0">
         <div className="relative h-full w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
-          {/* Vidéo en arrière-plan */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="h-full w-full object-cover"
-            style={{ objectFit: "cover" }}
-          >
-            {/* Remplacez "/videos/hero-video.mp4" par le chemin de votre vidéo */}
-            <source src="/videos/hero-video.mp4" type="video/mp4" />
-            {/* Fallback pour navigateurs qui ne supportent pas la vidéo */}
+          {/* La vidéo décorative reste réservée aux écrans capables de l'afficher sans coût mobile inutile. */}
+          {shouldPlayVideo ? (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              aria-hidden="true"
+              className="h-full w-full object-cover"
+              style={{ objectFit: "cover" }}
+            >
+              <source src="/videos/hero-video.mp4" type="video/mp4" />
+            </video>
+          ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">
-              <div className="rounded-2xl border-2 border-dashed border-primary/20 bg-muted/30 p-16 text-center">
-                <Play className="mx-auto h-16 w-16 text-primary/40" aria-hidden="true" />
-                <p className="mt-4 text-sm font-medium text-muted-foreground">
-                  Vidéo non disponible
-                </p>
-              </div>
+              <div
+                className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(99,102,241,0.16),transparent_30%),linear-gradient(135deg,rgba(15,23,42,0.18),rgba(15,23,42,0.02))]"
+                aria-hidden="true"
+              />
             </div>
-          </video>
+          )}
           {/* Overlay sombre avec dégradé pour améliorer la lisibilité */}
           <div
             className="absolute inset-0"
