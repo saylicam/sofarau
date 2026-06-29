@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import { ArrowRight, FileText, Play } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -40,6 +39,31 @@ function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; dura
 }
 
 export function Hero() {
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const loadVideo = () => setShouldLoadVideo(true);
+
+    if ("requestIdleCallback" in window && "cancelIdleCallback" in window) {
+      const idleId = window.requestIdleCallback(loadVideo, { timeout: 1500 });
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    const timeoutId = window.setTimeout(loadVideo, 800);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
+    if (shouldLoadVideo) {
+      videoRef.current?.load();
+    }
+  }, [shouldLoadVideo]);
+
   return (
     <section className="relative min-h-[90vh] overflow-hidden bg-white">
       {/* Container vidéo plein écran */}
@@ -47,15 +71,20 @@ export function Hero() {
         <div className="relative h-full w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
           {/* Vidéo en arrière-plan */}
           <video
+            ref={videoRef}
             autoPlay
             loop
             muted
             playsInline
+            preload="metadata"
+            aria-hidden="true"
+            tabIndex={-1}
             className="h-full w-full object-cover"
             style={{ objectFit: "cover" }}
           >
-            {/* Remplacez "/videos/hero-video.mp4" par le chemin de votre vidéo */}
-            <source src="/videos/hero-video.mp4" type="video/mp4" />
+            {shouldLoadVideo && (
+              <source src="/videos/hero-video.mp4" type="video/mp4" />
+            )}
             {/* Fallback pour navigateurs qui ne supportent pas la vidéo */}
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">
               <div className="rounded-2xl border-2 border-dashed border-primary/20 bg-muted/30 p-16 text-center">
