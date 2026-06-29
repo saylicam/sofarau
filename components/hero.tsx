@@ -54,8 +54,8 @@ export function Hero() {
       return () => window.cancelIdleCallback(idleId);
     }
 
-    const timeoutId = window.setTimeout(loadVideo, 800);
-    return () => window.clearTimeout(timeoutId);
+    const timeoutId = globalThis.setTimeout(loadVideo, 800);
+    return () => globalThis.clearTimeout(timeoutId);
   }, []);
 
   useEffect(() => {
