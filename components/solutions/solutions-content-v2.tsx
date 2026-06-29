@@ -33,7 +33,7 @@ const fadeInUp = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -296,7 +296,7 @@ export function SolutionsContentV2() {
               Précision Industrielle
             </h2>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
-              Fabrication sur mesure pour tous types d'ouvertures. Soutien
+              Fabrication sur mesure pour tous types d&apos;ouvertures. Soutien
               Logistique adapté à vos besoins.
             </p>
           </motion.div>
