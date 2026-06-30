@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Shield } from "lucide-react";
 
@@ -8,6 +8,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+
+const CONTACT_DRAFT_KEY = "sofarau-contact-draft";
+
+const emptyFormData = {
+  company: "",
+  name: "",
+  email: "",
+  vat: "",
+  phone: "",
+  message: "",
+};
+
+type ContactFormData = typeof emptyFormData;
 
 // Fonction de validation du numéro de TVA (format BE/BE0/BE1/BE2)
 function validateVAT(vat: string): boolean {
@@ -40,17 +53,33 @@ function sanitizeInput(input: string): string {
 }
 
 export function ContactForm() {
-  const [formData, setFormData] = useState({
-    company: "",
-    name: "",
-    email: "",
-    vat: "",
-    phone: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState<ContactFormData>(emptyFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  useEffect(() => {
+    const storedDraft = window.sessionStorage.getItem(CONTACT_DRAFT_KEY);
+
+    if (!storedDraft) {
+      return;
+    }
+
+    try {
+      const parsedDraft = JSON.parse(storedDraft) as Partial<ContactFormData>;
+
+      setFormData((prev) => ({
+        ...prev,
+        company: sanitizeInput(parsedDraft.company ?? ""),
+        vat: sanitizeInput(parsedDraft.vat ?? ""),
+        message: sanitizeInput(parsedDraft.message ?? ""),
+      }));
+    } catch {
+      // Un brouillon illisible ne doit pas bloquer l'accès au formulaire.
+    } finally {
+      window.sessionStorage.removeItem(CONTACT_DRAFT_KEY);
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -123,15 +152,8 @@ export function ContactForm() {
       // });
       
       setSubmitStatus("success");
-      setFormData({
-        company: "",
-        name: "",
-        email: "",
-        vat: "",
-        phone: "",
-        message: "",
-      });
-    } catch (error) {
+      setFormData(emptyFormData);
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -296,7 +318,7 @@ export function ContactForm() {
 
               <div className="rounded-md border bg-muted/40 p-3 text-xs text-muted-foreground">
                 <strong>Rappel :</strong> Ce site ne propose pas de pose chez le client final
-                et n'affiche aucun prix. Les demandes grand public ne sont pas traitées.
+                et n&apos;affiche aucun prix. Les demandes grand public ne sont pas traitées.
                 Toutes les données sont sécurisées et traitées conformément au RGPD.
               </div>
 
