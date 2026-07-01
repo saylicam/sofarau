@@ -66,7 +66,7 @@ export function MobileMenu() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 z-50 h-full w-80 bg-white shadow-2xl"
+              className="fixed right-0 top-0 z-50 h-full w-[min(20rem,100vw)] bg-white shadow-2xl"
             >
               <div className="flex h-full flex-col">
                 {/* Header */}
