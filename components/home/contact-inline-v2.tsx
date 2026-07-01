@@ -1,12 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import type { FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Building2, IdCard, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+
+const CONTACT_DRAFT_STORAGE_KEY = "sofarau-contact-draft";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -26,12 +30,39 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
 
 export function ContactInlineV2() {
+  const router = useRouter();
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+
+    const formData = new FormData(form);
+    const getField = (name: string) => String(formData.get(name) ?? "").trim();
+
+    try {
+      sessionStorage.setItem(
+        CONTACT_DRAFT_STORAGE_KEY,
+        JSON.stringify({
+          company: getField("company"),
+          vat: getField("vat"),
+          message: getField("message"),
+        }),
+      );
+    } catch {
+      // La navigation reste fonctionnelle si le stockage local est indisponible.
+    }
+
+    router.push("/contact-pro");
+  }
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-slate-50/50 to-white">
       {/* Dot Pattern Background */}
@@ -74,7 +105,7 @@ export function ContactInlineV2() {
 
             {/* Formulaire Massif */}
             <motion.div variants={itemVariants} className="md:col-span-7">
-              <form className="grid gap-6">
+              <form onSubmit={handleSubmit} className="grid gap-6">
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="grid gap-3">
                     <label
@@ -130,10 +161,10 @@ export function ContactInlineV2() {
                 </div>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Button
-                    type="button"
+                    type="submit"
                     className="h-14 rounded-full px-8 text-base font-semibold"
                   >
-                    Envoyer la demande
+                    Continuer sur Contact pro
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                   <div className="text-sm text-muted-foreground">

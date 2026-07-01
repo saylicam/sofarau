@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Shield } from "lucide-react";
 
@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+
+const CONTACT_DRAFT_STORAGE_KEY = "sofarau-contact-draft";
 
 // Fonction de validation du numéro de TVA (format BE/BE0/BE1/BE2)
 function validateVAT(vat: string): boolean {
@@ -51,6 +53,24 @@ export function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  useEffect(() => {
+    try {
+      const storedDraft = sessionStorage.getItem(CONTACT_DRAFT_STORAGE_KEY);
+      if (!storedDraft) return;
+
+      const draft = JSON.parse(storedDraft) as Partial<typeof formData>;
+      setFormData((prev) => ({
+        ...prev,
+        company: sanitizeInput(draft.company ?? ""),
+        vat: sanitizeInput(draft.vat ?? ""),
+        message: sanitizeInput(draft.message ?? ""),
+      }));
+      sessionStorage.removeItem(CONTACT_DRAFT_STORAGE_KEY);
+    } catch {
+      sessionStorage.removeItem(CONTACT_DRAFT_STORAGE_KEY);
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -131,7 +151,7 @@ export function ContactForm() {
         phone: "",
         message: "",
       });
-    } catch (error) {
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -296,7 +316,7 @@ export function ContactForm() {
 
               <div className="rounded-md border bg-muted/40 p-3 text-xs text-muted-foreground">
                 <strong>Rappel :</strong> Ce site ne propose pas de pose chez le client final
-                et n'affiche aucun prix. Les demandes grand public ne sont pas traitées.
+                et n&apos;affiche aucun prix. Les demandes grand public ne sont pas traitées.
                 Toutes les données sont sécurisées et traitées conformément au RGPD.
               </div>
 
