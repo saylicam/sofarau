@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Shield } from "lucide-react";
 
@@ -39,6 +39,10 @@ function sanitizeInput(input: string): string {
     .trim();
 }
 
+function getDraftValue(value: unknown): string {
+  return typeof value === "string" ? sanitizeInput(value) : "";
+}
+
 export function ContactForm() {
   const [formData, setFormData] = useState({
     company: "",
@@ -51,6 +55,33 @@ export function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  useEffect(() => {
+    try {
+      const draft = window.sessionStorage.getItem("sofarau-contact-draft");
+
+      if (!draft) {
+        return;
+      }
+
+      const parsedDraft = JSON.parse(draft) as Record<string, unknown>;
+
+      setFormData((previousData) => ({
+        ...previousData,
+        company: getDraftValue(parsedDraft.company) || previousData.company,
+        vat: getDraftValue(parsedDraft.vat) || previousData.vat,
+        message: getDraftValue(parsedDraft.message) || previousData.message,
+      }));
+
+      window.sessionStorage.removeItem("sofarau-contact-draft");
+    } catch {
+      try {
+        window.sessionStorage.removeItem("sofarau-contact-draft");
+      } catch {
+        // Ignoré: certains contextes privés bloquent complètement sessionStorage.
+      }
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

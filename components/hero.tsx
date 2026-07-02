@@ -40,23 +40,30 @@ function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; dura
 }
 
 export function Hero() {
+  const [videoError, setVideoError] = useState(false);
+
   return (
-    <section className="relative min-h-[90vh] overflow-hidden bg-white">
+    <section className="relative min-h-[90vh] overflow-x-hidden bg-white">
       {/* Container vidéo plein écran */}
       <div className="absolute inset-0 z-0">
         <div className="relative h-full w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
           {/* Vidéo en arrière-plan */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="h-full w-full object-cover"
-            style={{ objectFit: "cover" }}
-          >
-            {/* Remplacez "/videos/hero-video.mp4" par le chemin de votre vidéo */}
-            <source src="/videos/hero-video.mp4" type="video/mp4" />
-            {/* Fallback pour navigateurs qui ne supportent pas la vidéo */}
+          {!videoError ? (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              poster="/videos/hero-poster.webp"
+              className="h-full w-full object-cover"
+              style={{ objectFit: "cover" }}
+              onError={() => setVideoError(true)}
+              aria-hidden="true"
+            >
+              <source src="/videos/hero-video.mp4" type="video/mp4" />
+            </video>
+          ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">
               <div className="rounded-2xl border-2 border-dashed border-primary/20 bg-muted/30 p-16 text-center">
                 <Play className="mx-auto h-16 w-16 text-primary/40" aria-hidden="true" />
@@ -65,7 +72,7 @@ export function Hero() {
                 </p>
               </div>
             </div>
-          </video>
+          )}
           {/* Overlay sombre avec dégradé pour améliorer la lisibilité */}
           <div
             className="absolute inset-0"
@@ -140,7 +147,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-          className="mt-20 grid grid-cols-2 gap-6 md:grid-cols-4"
+          className="mt-14 grid grid-cols-2 gap-4 md:mt-20 md:grid-cols-4 md:gap-6"
         >
           {[
             { value: 100, suffix: "%", label: "Fabrication usine" },
