@@ -54,9 +54,8 @@ export function SchucoBlueprint() {
   const pathProgress = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 1]);
 
   return (
-    <div className="relative w-full overflow-x-auto">
+    <div ref={containerRef} className="relative w-full overflow-x-auto">
       <svg
-        ref={svgRef}
         viewBox="0 0 100 100"
         className="w-full h-auto min-w-[600px] md:min-w-0"
         style={{ maxHeight: "600px" }}
