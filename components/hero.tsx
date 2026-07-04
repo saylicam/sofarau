@@ -51,10 +51,11 @@ export function Hero() {
             loop
             muted
             playsInline
+            poster="/videos/hero-video-poster.webp"
+            preload="metadata"
             className="h-full w-full object-cover"
             style={{ objectFit: "cover" }}
           >
-            {/* Remplacez "/videos/hero-video.mp4" par le chemin de votre vidéo */}
             <source src="/videos/hero-video.mp4" type="video/mp4" />
             {/* Fallback pour navigateurs qui ne supportent pas la vidéo */}
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">

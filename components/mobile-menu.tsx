@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Factory, FileText, Mail, Layers3, Wrench, Eye } from "lucide-react";
@@ -9,6 +10,7 @@ import { Button } from "@/components/ui/button";
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   const menuItems = [
     { href: "/solutions", label: "Solutions", icon: Layers3 },
@@ -18,35 +20,33 @@ export function MobileMenu() {
     { href: "/contact-pro", label: "Contact pro", icon: Mail, primary: true },
   ];
 
-  return (
-    <>
-      {/* Bouton Burger */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border bg-white/80 backdrop-blur-sm transition-colors hover:bg-white"
-        aria-label="Menu"
-        aria-expanded={isOpen}
-      >
-        <div className="relative h-5 w-5">
-          <motion.span
-            className="absolute left-0 top-0 h-0.5 w-5 bg-foreground"
-            animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
-            transition={{ duration: 0.2 }}
-          />
-          <motion.span
-            className="absolute left-0 top-2 h-0.5 w-5 bg-foreground"
-            animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
-            transition={{ duration: 0.2 }}
-          />
-          <motion.span
-            className="absolute left-0 top-4 h-0.5 w-5 bg-foreground"
-            animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
-            transition={{ duration: 0.2 }}
-          />
-        </div>
-      </button>
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-      {/* Overlay et Menu */}
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
+  const menuPortal =
+    isMounted &&
+    createPortal(
       <AnimatePresence>
         {isOpen && (
           <>
@@ -56,17 +56,21 @@ export function MobileMenu() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+              className="fixed inset-0 z-[90] bg-black/50 backdrop-blur-sm"
               onClick={() => setIsOpen(false)}
             />
 
             {/* Menu Panel */}
             <motion.div
+              id="mobile-menu-panel"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 z-50 h-full w-80 bg-white shadow-2xl"
+              className="fixed right-0 top-0 z-[100] h-dvh w-full max-w-80 bg-white shadow-2xl"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation mobile"
             >
               <div className="flex h-full flex-col">
                 {/* Header */}
@@ -137,7 +141,41 @@ export function MobileMenu() {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
+    );
+
+  return (
+    <>
+      {/* Bouton Burger */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border bg-white/80 backdrop-blur-sm transition-colors hover:bg-white"
+        aria-label="Menu"
+        aria-expanded={isOpen}
+        aria-controls="mobile-menu-panel"
+      >
+        <div className="relative h-5 w-5">
+          <motion.span
+            className="absolute left-0 top-0 h-0.5 w-5 bg-foreground"
+            animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.2 }}
+          />
+          <motion.span
+            className="absolute left-0 top-2 h-0.5 w-5 bg-foreground"
+            animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          />
+          <motion.span
+            className="absolute left-0 top-4 h-0.5 w-5 bg-foreground"
+            animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.2 }}
+          />
+        </div>
+      </button>
+
+      {/* Overlay et menu rendus hors du header sticky/backdrop-blur. */}
+      {menuPortal}
     </>
   );
 }

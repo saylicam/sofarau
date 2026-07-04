@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Shield } from "lucide-react";
 
@@ -21,11 +21,11 @@ function validateVAT(vat: string): boolean {
     return false;
   }
   
-  // Validation du checksum (algorithme MOD 97)
+  // Validation du checksum belge : 97 - (8 premiers chiffres % 97) = 2 derniers chiffres.
   const digits = cleaned.slice(2);
-  const checkDigits = parseInt(digits.slice(0, 2), 10);
-  const baseNumber = parseInt(digits.slice(2), 10);
-  const remainder = (97 - (baseNumber % 97)) % 97;
+  const baseNumber = parseInt(digits.slice(0, 8), 10);
+  const checkDigits = parseInt(digits.slice(8), 10);
+  const remainder = 97 - (baseNumber % 97);
   
   return remainder === checkDigits;
 }
@@ -51,6 +51,24 @@ export function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  useEffect(() => {
+    const draft = sessionStorage.getItem("sofarau-contact-draft");
+    if (!draft) return;
+
+    try {
+      const parsed = JSON.parse(draft) as Partial<typeof formData>;
+      setFormData((prev) => ({
+        ...prev,
+        company: parsed.company || prev.company,
+        vat: parsed.vat || prev.vat,
+        message: parsed.message || prev.message,
+      }));
+      sessionStorage.removeItem("sofarau-contact-draft");
+    } catch {
+      sessionStorage.removeItem("sofarau-contact-draft");
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -131,7 +149,7 @@ export function ContactForm() {
         phone: "",
         message: "",
       });
-    } catch (error) {
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -279,7 +297,8 @@ export function ContactForm() {
                   className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-800"
                 >
                   <CheckCircle2 className="h-4 w-4" />
-                  Message envoyé avec succès. Nous vous répondrons sous peu.
+                  Demande validée. Connectez l&apos;endpoint d&apos;envoi avant la mise
+                  en production.
                 </motion.div>
               )}
 
@@ -296,12 +315,12 @@ export function ContactForm() {
 
               <div className="rounded-md border bg-muted/40 p-3 text-xs text-muted-foreground">
                 <strong>Rappel :</strong> Ce site ne propose pas de pose chez le client final
-                et n'affiche aucun prix. Les demandes grand public ne sont pas traitées.
+                et n&apos;affiche aucun prix. Les demandes grand public ne sont pas traitées.
                 Toutes les données sont sécurisées et traitées conformément au RGPD.
               </div>
 
               <Button type="submit" disabled={isSubmitting} className="rounded-full">
-                {isSubmitting ? "Envoi en cours..." : "Envoyer la demande"}
+                {isSubmitting ? "Validation en cours..." : "Valider la demande"}
               </Button>
             </form>
           </CardContent>
