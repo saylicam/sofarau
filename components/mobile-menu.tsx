@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const portalRoot = typeof document === "undefined" ? null : document.body;
 
   const menuItems = [
     { href: "/solutions", label: "Solutions", icon: Layers3 },
@@ -19,10 +19,6 @@ export function MobileMenu() {
     { href: "/vision", label: "Vision", icon: Eye },
     { href: "/contact-pro", label: "Contact pro", icon: Mail, primary: true },
   ];
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -45,7 +41,7 @@ export function MobileMenu() {
   }, [isOpen]);
 
   const menuPortal =
-    isMounted &&
+    portalRoot &&
     createPortal(
       <AnimatePresence>
         {isOpen && (
