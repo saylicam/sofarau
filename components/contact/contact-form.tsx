@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Shield } from "lucide-react";
 
@@ -9,25 +9,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-// Fonction de validation du numéro de TVA (format BE/BE0/BE1/BE2)
+const CONTACT_DRAFT_KEY = "sofarau-contact-draft";
+
+// Fonction de validation du numéro de TVA belge (BE + 10 chiffres).
 function validateVAT(vat: string): boolean {
-  // Supprimer les espaces et convertir en majuscules
   const cleaned = vat.replace(/\s/g, "").toUpperCase();
-  
-  // Format BE suivi de 10 chiffres
+
   const belgianVATPattern = /^BE[0-9]{10}$/;
-  
+
   if (!belgianVATPattern.test(cleaned)) {
     return false;
   }
-  
-  // Validation du checksum (algorithme MOD 97)
+
+  // Les 8 premiers chiffres forment la base; les 2 derniers sont le checksum.
   const digits = cleaned.slice(2);
-  const checkDigits = parseInt(digits.slice(0, 2), 10);
-  const baseNumber = parseInt(digits.slice(2), 10);
-  const remainder = (97 - (baseNumber % 97)) % 97;
-  
-  return remainder === checkDigits;
+  const baseNumber = parseInt(digits.slice(0, 8), 10);
+  const checkDigits = parseInt(digits.slice(8), 10);
+  const expectedCheckDigits = 97 - (baseNumber % 97);
+
+  return expectedCheckDigits === checkDigits;
 }
 
 // Fonction de sanitization pour prévenir les injections
@@ -51,6 +51,24 @@ export function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  useEffect(() => {
+    const storedDraft = sessionStorage.getItem(CONTACT_DRAFT_KEY);
+    if (!storedDraft) return;
+
+    try {
+      const draft = JSON.parse(storedDraft) as Partial<typeof formData>;
+      setFormData((prev) => ({
+        ...prev,
+        company: typeof draft.company === "string" ? draft.company : prev.company,
+        vat: typeof draft.vat === "string" ? draft.vat : prev.vat,
+        message: typeof draft.message === "string" ? draft.message : prev.message,
+      }));
+      sessionStorage.removeItem(CONTACT_DRAFT_KEY);
+    } catch {
+      sessionStorage.removeItem(CONTACT_DRAFT_KEY);
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -296,7 +314,7 @@ export function ContactForm() {
 
               <div className="rounded-md border bg-muted/40 p-3 text-xs text-muted-foreground">
                 <strong>Rappel :</strong> Ce site ne propose pas de pose chez le client final
-                et n'affiche aucun prix. Les demandes grand public ne sont pas traitées.
+                et n&apos;affiche aucun prix. Les demandes grand public ne sont pas traitées.
                 Toutes les données sont sécurisées et traitées conformément au RGPD.
               </div>
 
