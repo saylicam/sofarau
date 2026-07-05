@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
   const panelTitleId = useId();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -21,10 +20,6 @@ export function MobileMenu() {
     { href: "/vision", label: "Vision", icon: Eye },
     { href: "/contact-pro", label: "Contact pro", icon: Mail, primary: true },
   ];
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -176,7 +171,9 @@ export function MobileMenu() {
         </div>
       </button>
 
-      {isMounted ? createPortal(menuContent, document.body) : null}
+      {typeof document !== "undefined"
+        ? createPortal(menuContent, document.body)
+        : null}
     </>
   );
 }
