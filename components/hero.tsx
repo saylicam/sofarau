@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ArrowRight, FileText, Play } from "lucide-react";
+import { ArrowRight, FileText } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -51,20 +51,13 @@ export function Hero() {
             loop
             muted
             playsInline
+            preload="metadata"
+            poster="/videos/hero-poster.webp"
+            aria-hidden="true"
             className="h-full w-full object-cover"
-            style={{ objectFit: "cover" }}
           >
-            {/* Remplacez "/videos/hero-video.mp4" par le chemin de votre vidéo */}
             <source src="/videos/hero-video.mp4" type="video/mp4" />
-            {/* Fallback pour navigateurs qui ne supportent pas la vidéo */}
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">
-              <div className="rounded-2xl border-2 border-dashed border-primary/20 bg-muted/30 p-16 text-center">
-                <Play className="mx-auto h-16 w-16 text-primary/40" aria-hidden="true" />
-                <p className="mt-4 text-sm font-medium text-muted-foreground">
-                  Vidéo non disponible
-                </p>
-              </div>
-            </div>
+            Vidéo non disponible.
           </video>
           {/* Overlay sombre avec dégradé pour améliorer la lisibilité */}
           <div
