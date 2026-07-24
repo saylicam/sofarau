@@ -33,6 +33,11 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
+              <Link href="/vision" className="hover:text-foreground">
+                Vision
+              </Link>
+            </li>
+            <li>
               <Link href="/contact-pro" className="hover:text-foreground">
                 Contact pro
               </Link>
