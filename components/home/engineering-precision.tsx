@@ -25,7 +25,7 @@ const fadeInUp = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -70,7 +70,7 @@ export function EngineeringPrecision() {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-200px" }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
           >
             <div className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
               Ingénierie de Précision
@@ -110,7 +110,7 @@ export function EngineeringPrecision() {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] as const }}
           >
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -129,8 +129,8 @@ export function EngineeringPrecision() {
               <SchucoBlueprintInteractive />
             </div>
             <p className="mt-6 text-center text-xs text-muted-foreground">
-              Survolez les points d&apos;ancrage pour découvrir les détails
-              techniques
+              Cliquez ou survolez les points d&apos;ancrage pour découvrir les
+              détails techniques
             </p>
           </motion.div>
 
