@@ -1,6 +1,8 @@
 "use client";
 
+import { FormEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Building2, IdCard, ArrowRight } from "lucide-react";
 
@@ -26,12 +28,30 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
 
+const CONTACT_DRAFT_KEY = "sofarau-contact-draft";
+
 export function ContactInlineV2() {
+  const router = useRouter();
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const draft = {
+      company: String(formData.get("company") || ""),
+      vat: String(formData.get("vat") || ""),
+      message: String(formData.get("message") || ""),
+    };
+
+    sessionStorage.setItem(CONTACT_DRAFT_KEY, JSON.stringify(draft));
+    router.push("/contact-pro");
+  };
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-slate-50/50 to-white">
       {/* Dot Pattern Background */}
@@ -74,7 +94,7 @@ export function ContactInlineV2() {
 
             {/* Formulaire Massif */}
             <motion.div variants={itemVariants} className="md:col-span-7">
-              <form className="grid gap-6">
+              <form className="grid gap-6" onSubmit={handleSubmit}>
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="grid gap-3">
                     <label
@@ -130,7 +150,7 @@ export function ContactInlineV2() {
                 </div>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                   <Button
-                    type="button"
+                    type="submit"
                     className="h-14 rounded-full px-8 text-base font-semibold"
                   >
                     Envoyer la demande
