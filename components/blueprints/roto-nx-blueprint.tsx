@@ -4,9 +4,9 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
 export function RotoNXBlueprint() {
-  const svgRef = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: svgRef,
+    target: containerRef,
     offset: ["start end", "end start"],
   });
 
@@ -16,10 +16,9 @@ export function RotoNXBlueprint() {
     <div className="relative w-full overflow-hidden rounded-2xl border border-indigo-200/40 bg-gradient-to-br from-white via-indigo-50/20 to-white p-8 backdrop-blur-sm md:p-12">
       <div className="absolute inset-0 rounded-2xl bg-white/40 backdrop-blur-md" />
       
-      <div className="relative">
+      <div ref={containerRef} className="relative">
         <svg
-          ref={svgRef}
-          viewBox="0 0 100 100"
+            viewBox="0 0 100 100"
           className="w-full h-auto"
           style={{ maxHeight: "600px", minHeight: "400px" }}
           preserveAspectRatio="xMidYMid meet"
