@@ -33,7 +33,7 @@ const cardVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -66,6 +66,7 @@ function BentoCardV2({
       }}
       className={cn(
         "group relative rounded-3xl border border-slate-200/60 bg-white p-8 transition-all duration-300 hover:border-indigo-400/60",
+        link ? "pb-32" : "",
         height,
         className,
       )}
@@ -270,7 +271,7 @@ export function TechBentoV2() {
                 scale: 1.02,
                 transition: { duration: 0.2, ease: "easeOut" },
               }}
-              className="relative h-full rounded-3xl border border-slate-200/60 bg-white p-8 transition-all duration-300 hover:border-indigo-400/60 md:h-[420px]"
+              className="relative h-full rounded-3xl border border-slate-200/60 bg-white p-8 pb-40 transition-all duration-300 hover:border-indigo-400/60 md:h-[420px] md:pb-8"
               style={{
                 boxShadow:
                   "0 1px 0 rgba(15,23,42,0.02), 0 20px 60px rgba(15,23,42,0.08), 0 0 0 1px rgba(15,23,42,0.02)",
