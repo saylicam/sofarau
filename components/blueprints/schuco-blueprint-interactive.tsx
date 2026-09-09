@@ -265,6 +265,7 @@ export function SchucoBlueprintInteractive() {
                     current === hotspot.id ? null : hotspot.id,
                   )
                 }
+                initial={{ scale: 1, opacity: 0.8 }}
                 animate={{
                   scale: hoveredHotspot === hotspot.id ? [1, 1.3, 1] : 1,
                   opacity: hoveredHotspot === hotspot.id ? [0.8, 1, 0.8] : 0.8,
