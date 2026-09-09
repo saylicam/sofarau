@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   // Optimisations de performance
   compress: true,
   poweredByHeader: false,
+  agentRules: false,
   
   // Headers de sécurité
   async headers() {
