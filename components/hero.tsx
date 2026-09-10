@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 function AnimatedCounter({ end, duration = 2, suffix = "" }: { end: number; duration?: number; suffix?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, amount: 0.35 });
 
   useEffect(() => {
     if (!isInView) return;
