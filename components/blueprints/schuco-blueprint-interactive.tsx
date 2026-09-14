@@ -50,9 +50,9 @@ const hotspots: Hotspot[] = [
 
 export function SchucoBlueprintInteractive() {
   const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: svgRef,
+    target: containerRef,
     offset: ["start end", "end start"],
   });
 
@@ -63,10 +63,9 @@ export function SchucoBlueprintInteractive() {
       {/* Glassmorphism overlay */}
       <div className="absolute inset-0 rounded-2xl bg-white/40 backdrop-blur-md" />
       
-      <div className="relative">
+      <div ref={containerRef} className="relative">
         <svg
-          ref={svgRef}
-          viewBox="0 0 100 100"
+            viewBox="0 0 100 100"
           className="w-full h-auto"
           style={{ maxHeight: "700px", minHeight: "500px" }}
           preserveAspectRatio="xMidYMid meet"
@@ -254,8 +253,19 @@ export function SchucoBlueprintInteractive() {
                 stroke="white"
                 strokeWidth="0.5"
                 className="cursor-pointer"
+                tabIndex={0}
+                role="button"
+                aria-label={`${hotspot.label}: ${hotspot.description}`}
                 onMouseEnter={() => setHoveredHotspot(hotspot.id)}
                 onMouseLeave={() => setHoveredHotspot(null)}
+                onFocus={() => setHoveredHotspot(hotspot.id)}
+                onBlur={() => setHoveredHotspot(null)}
+                onClick={() =>
+                  setHoveredHotspot((current) =>
+                    current === hotspot.id ? null : hotspot.id,
+                  )
+                }
+                initial={{ scale: 1, opacity: 0.8 }}
                 animate={{
                   scale: hoveredHotspot === hotspot.id ? [1, 1.3, 1] : 1,
                   opacity: hoveredHotspot === hotspot.id ? [0.8, 1, 0.8] : 0.8,

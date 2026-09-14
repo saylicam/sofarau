@@ -33,7 +33,7 @@ const fadeInUp = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -66,6 +66,7 @@ function BentoCardV2({
       }}
       className={cn(
         "group relative rounded-2xl border-2 border-indigo-200 bg-white p-8 transition-all duration-300 hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]",
+        link ? "pb-32" : "",
         height,
         className,
       )}
@@ -296,7 +297,7 @@ export function SolutionsContentV2() {
               Précision Industrielle
             </h2>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
-              Fabrication sur mesure pour tous types d'ouvertures. Soutien
+              Fabrication sur mesure pour tous types d&apos;ouvertures. Soutien
               Logistique adapté à vos besoins.
             </p>
           </motion.div>
