@@ -46,7 +46,7 @@ function BentoCardV2({
   bullets,
   features,
   link,
-  height = "md:h-[450px]",
+  height = "md:min-h-[450px]",
 }: {
   title: string;
   description: string;
@@ -65,8 +65,7 @@ function BentoCardV2({
         transition: { duration: 0.2, ease: "easeOut" },
       }}
       className={cn(
-        "group relative rounded-2xl border-2 border-indigo-200 bg-white p-8 transition-all duration-300 hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]",
-        link ? "pb-32" : "",
+        "group relative flex h-full flex-col rounded-2xl border-2 border-indigo-200 bg-white p-8 transition-all duration-300 hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]",
         height,
         className,
       )}
@@ -120,7 +119,7 @@ function BentoCardV2({
       ) : null}
 
       {link ? (
-        <div className="absolute bottom-8 left-8 right-8">
+        <div className="mt-auto pt-8">
           <div className="mb-4 h-px bg-gradient-to-r from-transparent via-indigo-200 to-transparent" />
           <Button
             asChild
@@ -209,7 +208,7 @@ export function SolutionsContentV2() {
                 title="Schüco Living 82 MD"
                 description="Base de fabrication premium, pensée pour la performance thermique et la stabilité structurelle. Conception multi-chambres optimisée."
                 icon={<ChassisIcon className="h-7 w-7" />}
-                height="md:h-[520px]"
+                height="md:min-h-[520px]"
                 bullets={[
                   "Conception multi-chambres (orientation thermique optimisée).",
                   "Compatibilité configurations double vitrage advanced.",
@@ -231,7 +230,7 @@ export function SolutionsContentV2() {
                 title="Quincaillerie Roto NX"
                 description="Précision mécanique, sécurité renforcée, réglages fins. Le détail qui se ressent à l'usage quotidien."
                 icon={<ShieldCheck className="h-7 w-7" aria-hidden="true" />}
-                height="md:h-[520px]"
+                height="md:min-h-[520px]"
                 bullets={[
                   "Fiabilité des cinématiques d'ouverture.",
                   "Options sécurité selon exigences chantier.",
@@ -247,7 +246,7 @@ export function SolutionsContentV2() {
                 title="Moustiquaires Feneko"
                 description="Sur mesure, intégration discrète, cohérence esthétique. Fabrication adaptée aux cotes réelles du projet."
                 icon={<Sparkles className="h-7 w-7" aria-hidden="true" />}
-                height="md:h-[450px]"
+                height="md:min-h-[450px]"
                 bullets={[
                   "Fabrication adaptée aux cotes réelles.",
                   "Intégration pensée pour une pose professionnelle.",
@@ -263,7 +262,7 @@ export function SolutionsContentV2() {
                 title="Double Vitrage Advanced"
                 description="Configurations optimisées selon les exigences : thermique, acoustique, sécurité. Compatibilité avec Schüco Living 82 MD."
                 icon={<Sparkles className="h-7 w-7" aria-hidden="true" />}
-                height="md:h-[450px]"
+                height="md:min-h-[450px]"
                 features={[
                   { label: "Thermique", value: "Optimisé" },
                   { label: "Acoustique", value: "Sur configuration" },
