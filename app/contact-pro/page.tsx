@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { ContactForm } from "@/components/contact/contact-form";
 
 export const metadata: Metadata = {
-  title: "Espace Pro & Sécurité — SOFARAU S.R.L",
+  title: "Espace Pro & Sécurité",
   description:
     "Formulaire réservé aux professionnels (poseurs, revendeurs, architectes, entreprises) avec validation du numéro de TVA.",
 };
